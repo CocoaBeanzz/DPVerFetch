@@ -1,5 +1,5 @@
 # VerFetch Version Control Fetch
-# v1.0.0
+# v1.0.1
 # K Preston
 
 # Web Requests
@@ -19,8 +19,18 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+# Interpret repository type.
+repoType = str(os.environ.get("TYPE").lower())
+if repoType == 'git':
+    repoType = '-git'
+elif repoType == 'svn':
+    repoType = ''
+else:
+    print("Unrecognized repository type: " + repoType)
+
+# Stash RSS info.
 auth = urllib.request.HTTPBasicAuthHandler()
-RSS = str(os.environ.get("RSS"))
+RSS = "https://trac" + repoType + ".digipen.edu/projects/" + str(os.environ.get("REPO")) + "/log/?verbose=on&format=rss"
 domain = RSS.split("/")[2].split(".")[-2]
 auth.add_password(domain, RSS.split("/")[2].split("."), str(os.environ.get("USR")), str(os.environ.get("PASS")))
 
