@@ -20,7 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Interpret repository type.
-repoType = str(os.environ.get("TYPE").lower())
+repoType = str(os.environ.get("TYPE")).lower()
 if repoType == 'git':
     repoType = '-git'
 elif repoType == 'svn':
@@ -31,7 +31,7 @@ else:
 # Stash RSS info.
 auth = urllib.request.HTTPBasicAuthHandler()
 RSS = "https://trac" + repoType + ".digipen.edu/projects/" + str(os.environ.get("REPO")) + "/log/?verbose=on&format=rss"
-domain = RSS.split("/")[2].split(".")[-2]
+domain = 'digipen.edu'
 auth.add_password(domain, RSS.split("/")[2].split("."), str(os.environ.get("USR")), str(os.environ.get("PASS")))
 
 # Version Update Discord Message Object
@@ -93,8 +93,8 @@ while 1:
     # "The easy but horribly insecure way"
     try:
         # Get RSS feed.
-        feed = feedparser.parse("https://" + str(os.environ.get("USR")) + ":" + str(os.environ.get("PASS")) + "@" + str(str(os.environ.get("RSS")).split("//")[1]))
-
+        feed = feedparser.parse("https://" + str(os.environ.get("USR")) + ":" + str(os.environ.get("PASS")) + "@" + RSS.split("//")[1])
+        
         # New lastID is latest entry. Don't change old var yet, that's the endpoint.
         newLastID = feed.entries[0]["id"]
         file = open("lastID", "w")
