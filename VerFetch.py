@@ -30,7 +30,7 @@ else:
 
 # Stash RSS info.
 auth = urllib.request.HTTPBasicAuthHandler()
-RSS = "https://trac" + repoType + ".digipen.edu/projects/" + str(os.environ.get("REPO")) + "/log/?verbose=on&format=rss"
+RSS = "https://trac" + repoType + ".digipen.edu/projects/" + str(os.environ.get("REPO")) + "/timeline/?verbose=on&format=rss"
 domain = 'digipen.edu'
 auth.add_password(domain, RSS.split("/")[2].split("."), str(os.environ.get("USR")), str(os.environ.get("PASS")))
 
@@ -56,7 +56,9 @@ class Post:
         embed = discord.Embed()
         embed.set_author(name=data["author"])
         embed.title = data["title"].split(":")[0]
-        embed.description = re.sub("<.*>", "", data["description"]).replace("\n\n","\n")
+        description =data["description"].replace('class="missing wiki"', '>').replace('?</a>','')
+        description = re.sub("<.*>", "", description).replace("\n\n","\n")
+        embed.description = description
         # Collapse doubled newlines.
         while "\n\n" in embed.description:
             embed.description = embed.description.replace("\n\n", "\n")
@@ -70,6 +72,7 @@ class Post:
         }
 
         # Print to console.
+        print(data)
         print(embed.author)
         print(embed.title)
         print(embed.description)
@@ -113,6 +116,7 @@ while 1:
             # If this entry has not been seen before...
             else:
                 # Prepare and send a Discord message for this update.
+                print('id: ' + entry['id'])
                 post = Post(os.environ.get("HOOK"), entry)
                 post.prepare_and_notify()
 
