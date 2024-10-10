@@ -18,4 +18,7 @@ This script loops every 30 seconds and sends a separate discord message for each
 - Populate .env with the labeled fields. Unless you have specific credentials for bot access, your personal credentials may be necessary.
 - Run VerFetch.py.
 
+## Updating:
+When updating DPVerFetch, delete lastID. DPVerFetch will briefly flood the channel as it catches up to the lastest messages. 
+
 **Please credit me for my work. Don't tell your friends you made this.**
